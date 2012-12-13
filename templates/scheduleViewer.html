@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}
+	{{ classchoice }}
+{% endblock %}
+{% block body %}
+		{{ now.date() }}
+		{% for each in choice %}
+			{% if each.startTime.date() == now.date() %}
+				<h3>{{ each.subject|safe }}</h3>
+				{{ each.class|safe }} {{ each.teacher|safe }} {{ each.location|safe }} <br />
+				{{ each.startTime.hour }}:{{ each.startTime.minute }} -
+				{{ each.endTime.hour }}:{{ each.endTime.minute }}<br />
+			{% endif %}
+		{% endfor %}
+{% endblock %}
