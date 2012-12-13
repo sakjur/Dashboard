@@ -3,6 +3,15 @@ import re
 import datetime
 from flask import abort
 
+def classList():
+	classList = {
+		1003: 5250000,
+		1101: 5580000,
+		1103: 5582000
+	}
+
+	return classList 
+
 def getClassSchedule(classchoice):
 
 	# Find associated classIdentifier using the classchoice the function has been invoked with.
@@ -27,19 +36,9 @@ def classID(classchoice):
 	# classID(int) takes an integer as argument and returns the value that is associated with that integer.
 	# Returns None if classchoice is not in the classList
 	# Value is used for TimeEdit-identifiers.
-	classList = {
-		1003: 5250000,
-		1101: 5580000,
-		1103: 5582000
-	}
-	return classList.get(classchoice, None)
+	return classList().get(classchoice, None)
 
 def eventMakeObject(event):
-	classList = {
-		1003: 5250000,
-		1101: 5580000,
-		1103: 5582000
-	}
 	event = event.split("\n")
 	objArray = []
 	eventDict = {}
@@ -55,11 +54,11 @@ def eventMakeObject(event):
 		elif re.match("(?:SUMMARY)(.*?)", each): # Find the SUMMARY-property
 			summary = each.split(":") # Split SUMMARY on each comma
 			classProperty = summary[1] # Second part of the summary is the class-property
-			classProperty = classProperty.replace(" ", "")
-			classProperty = classProperty.split(",")
+			classProperty = classProperty.replace(" ", "") # Remove spaces
+			classProperty = classProperty.split(",") # Split on comma
 			classInsert = []
 			for each in classProperty:
-				if int(each) in classList:
+				if int(each) in classList():
 					classURL = "<a href=\"//127.0.0.1:5000/class/" + each + "\">" + each + "</a>"
 					classInsert.append(classURL)
 				else:
