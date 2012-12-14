@@ -3,11 +3,17 @@
 <head>
 	<meta charset="utf-8" />
 	<title>{% block title %}{% endblock %} Dashboard</title>
+	<link href="/static/style.css" type="text/css" rel="stylesheet" />
+
 </head>
 
 <body>
-	<h1>Dashboard</h1>
-	{% block body %}{% endblock %}
+	<div id="content">
+		{% block body %}{% endblock %}
+	</div>
 </body>
+
+<script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/static/script.js"></script>
 
 </html>

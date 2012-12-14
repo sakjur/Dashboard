@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block body %}
+	<ul>
+		{% for each in classList.keys() %}
+			<li><a href="{{ url_for("class_choice", classchoice=each) }}">{{ each }}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

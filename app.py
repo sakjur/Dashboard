@@ -11,9 +11,15 @@ now = datetime.datetime.now()
 def hello_world():
 	return render_template('layout.html')
 
+@app.route('/class/')
+def class_list():
+	classList = scraper.classList()
+	return render_template('classList.html', classList=classList)
+
 @app.route('/class/<int:classchoice>')
-def class_choice(classchoice):
-	choice = scraper.getClassSchedule(classchoice)
+@app.route('/class/<int:classchoice>/<int:datechoice>')
+def class_choice(classchoice=None, datechoice=None):
+	choice = scraper.getClassSchedule(classchoice, str(datechoice))
 	return render_template('scheduleViewer.html', choice=choice, now=now, classchoice=classchoice)
 
 @app.route('/teacher/<teacherchoice>')

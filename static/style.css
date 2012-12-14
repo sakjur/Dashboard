@@ -1,0 +1,23 @@
+body {
+	background: #000000;
+	color: #ffffff;
+}
+
+#content {
+	width: 460px;
+	margin: 0 auto;
+	padding: 5px;
+}
+
+#content h1 {
+	margin-left: -15px;
+}
+
+hr {
+	border: 0px;
+	border-top: 1px #ababab solid;
+}
+
+.detailedinfo {
+	display: none;
+}

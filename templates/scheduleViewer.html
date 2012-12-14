@@ -2,14 +2,23 @@
 {% block title %}
 	{{ classchoice }}
 {% endblock %}
+
 {% block body %}
-		{{ now.date() }}
-		{% for each in choice %}
-			{% if each.startTime.date() == now.date() %}
-				<h3>{{ each.subject|safe }}</h3>
-				{{ each.class|safe }} {{ each.teacher|safe }} {{ each.location|safe }} <br />
-				{{ each.startTime.hour }}:{{ each.startTime.minute }} -
-				{{ each.endTime.hour }}:{{ each.endTime.minute }}<br />
-			{% endif %}
-		{% endfor %}
+	<h1>{{ classchoice }}</h1>
+	Vecka {{ now.date().isocalendar()[1] }} - {{ now.date() }}
+	<br />
+	{% for each in choice %}
+		<div class="eventtitle">
+			<span style="font-size:150%">{{ each.subject|safe }}</span>
+			{{ each.startTime.hour }}:{{ "%02g" % each.startTime.minute }}
+			 -
+			{{ each.endTime.hour }}:{{ "%02g" % each.endTime.minute }}
+		</div>
+		<div class="detailedinfo">
+			{{ each.class|safe }} <br />
+			{{ each.teacher|safe }}	<br />
+			{{ each.location|safe }} <br />
+		</div>
+		<hr />
+	{% endfor %}
 {% endblock %}
