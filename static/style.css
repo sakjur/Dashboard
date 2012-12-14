@@ -21,3 +21,11 @@ hr {
 .detailedinfo {
 	display: none;
 }
+
+a {
+	color: #efefef;
+}
+
+a:hover {
+	color: #acacac;	
+}

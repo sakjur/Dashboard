@@ -1,6 +1,5 @@
 from flask import Flask, request, session, g, redirect, url_for, \
 	 abort, render_template, flash
-from bs4 import BeautifulSoup
 import datetime
 import scraper, dateparser
 
