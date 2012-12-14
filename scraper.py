@@ -1,10 +1,5 @@
-import urllib2
-import re
-import math
-import datetime
+import urllib2, re, math, datetime
 from flask import abort, url_for
-
-now = datetime.datetime.now()
 
 def classList():
 	classList = {
@@ -18,31 +13,6 @@ def classList():
 
 def getClassSchedule(classchoice, datechoice):
 
-	if datechoice == None:
-		# Currently non-functional
-		datechoice = now.date()
-	elif len(datechoice) == 6:
-		year = int("20" + datechoice[:2])
-		month = int(datechoice[2:4])
-		day = int(datechoice[4:6])
-		datechoice = datetime.datetime(year, month, day)
-	elif len(datechoice) == 8:
-		year = int(datechoice[:4])
-		month = int(datechoice[4:6])
-		day = int(datechoice[6:8])
-		datechoice = datetime.datetime(year, month, day)
-	elif len(datechoice) == 12:
-		#TODO
-		yearfrom = int("20" + str(datechoice[:2]))
-		monthfrom = int(str(datechoice[2:4]))
-		dayfrom = int(str(datechoice[4:6]))
-		yearto = int("20" + str(datechoice[:2]))
-		monthto = int(str(datechoice[2:4]))
-		dayto = int(str(datechoice[4:6]))
-		datechoice = [datetime.datetime(yearfrom, monthfrom, dayfrom), datetime.datetime(yearto, monthto, dayto)]
-	else:
-		datechoice = now.date()
-
 	# Find associated classIdentifier using the classchoice the function has been invoked with.
 	classIdentifier = classID(classchoice)
 
@@ -50,8 +20,12 @@ def getClassSchedule(classchoice, datechoice):
 		# Abort operation if no class with name classchoice can be found.
 		abort(404)
 	
+	fromDate = str(datechoice.year)[2:] + str(datechoice.isocalendar()[1])
+	toDate = str(datechoice.year)[2:] + str(datechoice.isocalendar()[1])
+
 	schedule = cleanVcsFile("http://schema.abbindustrigymnasium.se:8080/" +
-		"4DACTION/iCal_downloadReservations/timeedit.vcs?from=1250&to=1250&id1=" + str(classIdentifier))
+		"4DACTION/iCal_downloadReservations/timeedit.vcs" +
+		"?from=" + fromDate + "&to=" + toDate + "&id1=" + str(classIdentifier))
 
 	scheduleFormatted = []
 	for each in schedule:

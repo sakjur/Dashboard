@@ -5,7 +5,7 @@
 
 {% block body %}
 	<h1>{{ classchoice }}</h1>
-	Vecka {{ now.date().isocalendar()[1] }} - {{ now.date() }}
+	Vecka {{ datechoice.isocalendar()[1] }} - {{ datechoice }}
 	<br />
 	{% for each in choice %}
 		<div class="eventtitle">

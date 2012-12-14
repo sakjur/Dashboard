@@ -2,7 +2,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 	 abort, render_template, flash
 from bs4 import BeautifulSoup
 import datetime
-import scraper
+import scraper, dateparser
 
 app = Flask(__name__)
 now = datetime.datetime.now()
@@ -16,11 +16,12 @@ def class_list():
 	classList = scraper.classList()
 	return render_template('classList.html', classList=classList)
 
-@app.route('/class/<int:classchoice>')
-@app.route('/class/<int:classchoice>/<int:datechoice>')
+@app.route('/class/<int:classchoice>/')
+@app.route('/class/<int:classchoice>/<int:datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
-	choice = scraper.getClassSchedule(classchoice, str(datechoice))
-	return render_template('scheduleViewer.html', choice=choice, now=now, classchoice=classchoice)
+	datechoice = dateparser.parseDate(str(datechoice))
+	choice = scraper.getClassSchedule(classchoice, datechoice)
+	return render_template('scheduleViewer.html', choice=choice, datechoice=datechoice, classchoice=classchoice)
 
 @app.route('/teacher/<teacherchoice>')
 def teacher_choice(teacherchoice):
