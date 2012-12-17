@@ -1,6 +1,15 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
 body {
-	background: #000000;
+	background: #111100;
 	color: #ffffff;
+	font-family: "Source Sans Pro", sans-serif
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 #content {
@@ -10,12 +19,14 @@ body {
 }
 
 hr {
+	margin: 0;
 	border: 0px;
 	border-top: 1px #ababab solid;
 }
 
 .detailedinfo {
 	display: none;
+	padding: 5px;
 }
 
 a {
@@ -28,9 +39,19 @@ a:hover {
 
 h1 {
 	display: inline;
+	cursor:pointer;
 }
 
 .classlist a {
 	margin: 10px 25px 10px 25px;
 	line-height: 2em;
+}
+
+.eventtitle {
+	padding:10px;
+	cursor:pointer;
+}
+
+.eventtitle:nth-child(2n) {
+	background: #111122;
 }
