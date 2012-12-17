@@ -5,11 +5,10 @@
 
 {% block body %}
 	<h1>{{ classchoice }}</h1>
-	Vecka {{ datechoice.isocalendar()[1] }} - {{ datechoice }}
-	<br />
 	{% for each in choice %}
 		<div class="eventtitle">
 			<span style="font-size:150%">{{ each.subject|safe }}</span>
+			{{ each.startTime.date() }}
 			{{ each.startTime.hour }}:{{ "%02g" % each.startTime.minute }}
 			 -
 			{{ each.endTime.hour }}:{{ "%02g" % each.endTime.minute }}

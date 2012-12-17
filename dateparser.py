@@ -1,4 +1,4 @@
-import datetime
+import datetime, re
 
 now = datetime.datetime.now()
 
@@ -26,3 +26,17 @@ def parseDate(datechoice):
 		return [datetime.date(yearfrom, monthfrom, dayfrom), datetime.date(yearto, monthto, dayto)]
 	else:
 		return now.date()
+
+def parseVcsTimeFormat(timestring):
+	# Incoming time format will look like 20121213T071000Z (which is a UTC time)
+	if re.match('[0-9]{8}T[0-9]{6}Z', timestring):
+		year 		= int(timestring[:4]) # (2012)
+		month		= int(timestring[4:6]) # (12)
+		day			= int(timestring[6:8]) # (13)
+		hour		= int(timestring[9:11]) # (07)
+		minutes		= int(timestring[11:13]) # (10)
+		seconds 	= int(timestring[13:15]) #  (00)
+		finalDt	= datetime.datetime(year, month, day, hour, minutes, seconds)
+		return finalDt
+	else:
+		return None

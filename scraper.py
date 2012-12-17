@@ -1,20 +1,17 @@
 import urllib2, re, math, datetime
+from event import eventMakeObject
+from data import classList, classID
 from flask import abort, url_for
 
-def classList():
-	classList = {
-		1001: 5248000,
-		1003: 5250000,
-		1101: 5580000,
-		1103: 5582000
-	}
-
-	return classList 
-
-def getClassSchedule(classchoice, datechoice):
+def getClassSchedule(classchoice, parsedDate):
 
 	# Find associated classIdentifier using the classchoice the function has been invoked with.
 	classIdentifier = classID(classchoice)
+
+	if type(parsedDate) == list:
+		datechoice = parsedDate[0]
+	else:
+		datechoice = parsedDate 
 
 	if classIdentifier == None:
 		# Abort operation if no class with name classchoice can be found.
@@ -30,71 +27,12 @@ def getClassSchedule(classchoice, datechoice):
 	scheduleFormatted = []
 	for each in schedule:
 		if re.match("^\n(?:DTSTART)", each): # Only include event-filled rows
-			event = eventMakeObject(each, datechoice)
-			if event != None:
-				scheduleFormatted.append(event)
+			e = eventMakeObject(each, datechoice)
+			if e != None:
+				scheduleFormatted.append(e)
 
 	return scheduleFormatted
 
-def classID(classchoice):
-	# classID(int) takes an integer as argument and returns the value that is associated with that integer.
-	# Returns None if classchoice is not in the classList
-	# Value is used for TimeEdit-identifiers.
-	return classList().get(classchoice, None)
-
-def eventMakeObject(event, datechoice):
-	event = event.split("\n")
-	objArray = []
-	eventDict = {}
-	for each in event:
-		if re.match("(?:DTSTART)(.*?)", each): # Find start time
-			dtstart 	= each.replace("DTSTART:", "") # Remove non-relevant info
-			startTime 	= parseVcsTimeFormat(dtstart) # Parse the "VCS time format" to datetime
-			eventDict['startTime'] 	= startTime
-		elif re.match("(?:DTEND)(.*?)", each): # Find end time
-			dtend 		= each.replace("DTEND:", "") # Remove non-relevant info
-			endTime		= parseVcsTimeFormat(dtend) # Parse the "VCS time format" to datetime
-			eventDict['endTime']	= endTime
-		elif re.match("(?:SUMMARY)(.*?)", each): # Find the SUMMARY-property
-			summary = each.split(":") # Split SUMMARY on each comma
-			classProperty = summary[1] # Second part of the summary is the class-property
-			classProperty = classProperty.replace(" ", "") # Remove spaces
-			classProperty = classProperty.split(",") # Split on comma
-			classInsert = []
-			for each in classProperty:
-				if int(each) in classList():
-					classURL = '<a href="' + url_for("class_choice", classchoice=int(each)) + '">' + each + '</a>'
-					classInsert.append(classURL)
-				else:
-					classInsert.append(each)
-			eventDict['class']		= ", ".join(classInsert)
-			eventDict['teacher']	= summary[2] # Third part of the summary is the teacher-property
-			eventDict['subject']	= summary[3] # Fourth part of the summary is the subject-property
-			if len(summary) > 4:
-				eventDict['subjectID']	= summary[4]
-			else:
-				eventDict['subjectID']	= None
-			if len(summary) > 5:
-				eventDict['comment']	= summary[5]
-			else:
-				eventDict['comment']	= None
-		elif re.match("(?:LOCATION)(.*?)", each): # Find the LOCATION-property
-			eventDict['location']	= each.replace("LOCATION;ENCODING=QUOTED-PRINTABLE:", "") # Remove non-relevant info
-	if eventDict['startTime'].date() == datechoice:
-		return eventDict
-	else:
-		return None
-
-def parseVcsTimeFormat(timestring):
-	# Incoming time format will look like 20121213T071000Z (which is a UTC time)
-	year 		= int(timestring[:4]) # (2012)
-	month		= int(timestring[4:6]) # (12)
-	day			= int(timestring[6:8]) # (13)
-	hour		= int(timestring[9:11]) # (07)
-	minutes		= int(timestring[11:13]) # (10)
-	seconds 	= int(timestring[13:15]) #  (00)
-	finalDt	= datetime.datetime(year, month, day, hour, minutes, seconds)
-	return finalDt
 
 def cleanVcsFile(url):
 	fetchVcsUrl = urllib2.urlopen(url) # Fetch the VCS-file
