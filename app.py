@@ -19,9 +19,10 @@ def class_list():
 @app.route('/class/<int:classchoice>/<int:datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
 	datechoice = dateparser.parseDate(str(datechoice))
+	classList = sorted(scraper.classList().keys())
 	choice = scraper.getClassSchedule(classchoice, datechoice)
 	return render_template('scheduleViewer.html', choice=choice, datechoice=datechoice, \
-		classchoice=classchoice)
+		classchoice=classchoice, classList=classList)
 
 @app.route('/teacher/<teacherchoice>')
 def teacher_choice(teacherchoice):

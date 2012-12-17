@@ -4,16 +4,21 @@
 {% endblock %}
 
 {% block body %}
-	<h1>{{ classchoice }}</h1>
+	<h1 id="classname">{{ classchoice }}</h1> {{ datechoice }}<br />
+	<div class="classlist" style="display:none;">
+		{% for each in classList %}
+			<a href="{{ url_for("class_choice", classchoice=each) }}">{{ each }}</a>
+		{% endfor %}
+	</div>
 	{% for each in choice %}
 		<div class="eventtitle">
 			<span style="font-size:150%">{{ each.subject|safe }}</span>
-			{{ each.startTime.date() }}
 			{{ each.startTime.hour }}:{{ "%02g" % each.startTime.minute }}
 			 -
 			{{ each.endTime.hour }}:{{ "%02g" % each.endTime.minute }}
 		</div>
 		<div class="detailedinfo">
+			{{ each.startTime.date() }} <br />
 			{{ each.class|safe }} <br />
 			{{ each.teacher|safe }}	<br />
 			{{ each.location|safe }} <br />

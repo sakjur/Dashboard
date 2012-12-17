@@ -25,3 +25,12 @@ a {
 a:hover {
 	color: #acacac;	
 }
+
+h1 {
+	display: inline;
+}
+
+.classlist a {
+	margin: 10px 25px 10px 25px;
+	line-height: 2em;
+}

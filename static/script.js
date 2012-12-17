@@ -7,5 +7,9 @@
 $(function() {
 	$(".eventtitle").click(function() {
 		$(this).next('.detailedinfo').toggle(300);
-	})
+	});
+
+	$('#classname').click(function() {
+		$('.classlist').toggle(300);
+	});
 });
