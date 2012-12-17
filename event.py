@@ -10,11 +10,11 @@ def eventMakeObject(event, datechoice):
 	for each in event:
 		if re.match("(?:DTSTART)(.*?)", each): # Find start time
 			dtstart 	= each.replace("DTSTART:", "") # Remove non-relevant info
-			startTime 	= dateparser.parseVcsTimeFormat(dtstart) # Parse the "VCS time format" to datetime
+			startTime 	= dateparser.parseVcsTimeFormat(dtstart) # Parse to datetime
 			eventDict['startTime'] 	= startTime
 		elif re.match("(?:DTEND)(.*?)", each): # Find end time
 			dtend 		= each.replace("DTEND:", "") # Remove non-relevant info
-			endTime		= dateparser.parseVcsTimeFormat(dtend) # Parse the "VCS time format" to datetime
+			endTime		= dateparser.parseVcsTimeFormat(dtend) # Parse to datetime
 			eventDict['endTime']	= endTime
 		elif re.match("(?:SUMMARY)(.*?)", each): # Find the SUMMARY-property
 			summary = each.split(":") # Split SUMMARY on each comma
@@ -24,13 +24,14 @@ def eventMakeObject(event, datechoice):
 			classInsert = []
 			for each in classProperty:
 				if int(each) in classList():
-					classURL = '<a href="' + url_for("class_choice", classchoice=int(each)) + '">' + each + '</a>'
+					classURL = '<a href="' + url_for("class_choice", classchoice=int(each)) + '">' +
+					 each + '</a>'
 					classInsert.append(classURL)
 				else:
 					classInsert.append(each)
 			eventDict['class']		= ", ".join(classInsert)
-			eventDict['teacher']	= summary[2] # Third part of the summary is the teacher-property
-			eventDict['subject']	= summary[3] # Fourth part of the summary is the subject-property
+			eventDict['teacher']	= summary[2] # 
+			eventDict['subject']	= summary[3] # 
 			if len(summary) > 4:
 				eventDict['subjectID']	= summary[4]
 			else:
@@ -40,7 +41,7 @@ def eventMakeObject(event, datechoice):
 			else:
 				eventDict['comment']	= None
 		elif re.match("(?:LOCATION)(.*?)", each): # Find the LOCATION-property
-			eventDict['location']	= each.replace("LOCATION;ENCODING=QUOTED-PRINTABLE:", "") # Remove non-relevant info
+			eventDict['location']	= each.replace("LOCATION;ENCODING=QUOTED-PRINTABLE:", "")
 	if eventDict['startTime'].date() == datechoice:
 		return eventDict
 	else:
