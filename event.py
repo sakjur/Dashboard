@@ -24,8 +24,8 @@ def eventMakeObject(event, datechoice):
 			classInsert = []
 			for each in classProperty:
 				if int(each) in classList():
-					classURL = '<a href="' + url_for("class_choice", classchoice=int(each)) + '">' +
-					 each + '</a>'
+					classURL = '<a href="' + url_for("class_choice", classchoice=int(each)) + '">' \
+					+ each + '</a>'
 					classInsert.append(classURL)
 				else:
 					classInsert.append(each)
