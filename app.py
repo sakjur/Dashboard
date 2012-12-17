@@ -1,7 +1,7 @@
 from flask import Flask, request, session, g, redirect, url_for, \
 	 abort, render_template, flash
 import datetime, os
-import scraper, dateparser
+import scraper, dateparser, data
 
 app = Flask(__name__)
 now = datetime.datetime.now()
@@ -12,14 +12,14 @@ def hello_world():
 
 @app.route('/class/')
 def class_list():
-	classList = scraper.classList()
+	classList = data.classList()
 	return render_template('classList.html', classList=classList)
 
 @app.route('/class/<int:classchoice>/')
 @app.route('/class/<int:classchoice>/<int:datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
 	datechoice = dateparser.parseDate(str(datechoice))
-	classList = sorted(scraper.classList().keys())
+	classList = sorted(data.classList().keys())
 	choice = scraper.getClassSchedule(classchoice, datechoice)
 	return render_template('scheduleViewer.html', choice=choice, datechoice=datechoice, \
 		classchoice=classchoice, classList=classList)
