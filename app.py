@@ -1,6 +1,6 @@
 from flask import Flask, request, session, g, redirect, url_for, \
 	 abort, render_template, flash
-import datetime
+import datetime, os
 import scraper, dateparser
 
 app = Flask(__name__)
@@ -27,5 +27,9 @@ def teacher_choice(teacherchoice):
 	return render_template('scheduleViewer.html', choice=teacherchoice)
 
 if __name__ == '__main__':
-	app.debug = True
-	app.run()
+	app.debug = False
+	if app.debug == False:
+		port = int(os.environ.get('PORT', 5000))
+		app.run(host='0.0.0.0', port=port)
+	else:
+		app.run()
