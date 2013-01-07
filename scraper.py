@@ -17,8 +17,10 @@ def getClassSchedule(classchoice, parsedDate):
 		# Abort operation if no class with name classchoice can be found.
 		abort(404)
 	
-	fromDate = str(datechoice.year)[2:] + str(datechoice.isocalendar()[1])
-	toDate = str(datechoice.year)[2:] + str(datechoice.isocalendar()[1])
+	# Parsing dates in the TimeEdit-request form (ie the last two digits of year + the weeknumber)
+	# Range: "0001" - "9953"
+	fromDate = str(datechoice.year)[2:].zfill(2) + str(datechoice.isocalendar()[1]).zfill(2)
+	toDate = str(datechoice.year)[2:].zfill(2) + str(datechoice.isocalendar()[1]).zfill(2)
 
 	schedule = cleanVcsFile("http://schema.abbindustrigymnasium.se:8080/" +
 		"4DACTION/iCal_downloadReservations/timeedit.vcs" +
