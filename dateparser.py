@@ -39,4 +39,11 @@ def parseVcsTimeFormat(timestring):
 		finalDt	= datetime.datetime(year, month, day, hour, minutes, seconds)
 		return finalDt
 	else:
-		return None
+		raise Exception('parsing', 'failed')
+		return False
+
+def diffFromUtc(vardatetime):
+	if type(vardatetime) != datetime.datetime:
+		raise Exception
+	else:
+		raise Exception
