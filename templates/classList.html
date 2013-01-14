@@ -1,8 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
-	<ul>
-		{% for each in classList.keys() %}
-			<li><a href="{{ url_for("class_choice", classchoice=each) }}">{{ each }}</a></li>
+	<div class="hero-unit">
+	    <h1>Dashboard</h1>
+	    <p>This project is made by <a href="http://theusr.org">Emil Tullstedt</a> because TimeEdit sucks.</p>
+    </div>
+	<div class="row-fluid">
+		{% for each in classList %}
+			<div>
+				<a href="{{ url_for("class_choice", classchoice=each) }}" class="span4" style="text-align:center;">{{ each }}</a>
+			</div>
 		{% endfor %}
-	</ul>
+	</div>
+
 {% endblock %}
