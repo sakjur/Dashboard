@@ -1,32 +1,49 @@
-from flask import Flask, request, session, g, redirect, url_for, \
-	 abort, render_template, flash
-import datetime, os
-import scraper, dateparser, data
+"""
+Main file of Dashboard, an schedule viewer for ABB Industrigymnasium
+developed by Emil Tullstedt as a hobby project.
 
-app = Flask(__name__)
-now = datetime.datetime.now()
+This project has no affliation with the school to do whatsoever.
 
-@app.route('/')
-@app.route('/class/')
+(C) 2012-2013 Emil Tullstedt
+"""
+
+from flask import Flask, render_template
+import os
+import scraper
+import data
+
+APP = Flask(__name__)
+CLASSLIST = sorted(data.classList().keys())
+
+
+@APP.route('/')
+@APP.route('/class/')
 def class_list():
-	classList = sorted(data.classList().keys())
-	return render_template('classList.html', classList=classList)
+    """
+    Output: HTML-formatted classlist and main page
+    """
+    return render_template('classList.html', classList=CLASSLIST)
 
-@app.route('/<int:classchoice>/')
-@app.route('/<int:classchoice>/<int:datechoice>/')
-@app.route('/class/<int:classchoice>/')
-@app.route('/class/<int:classchoice>/<int:datechoice>/')
+
+@APP.route('/<int:classchoice>/')
+@APP.route('/<int:classchoice>/<int:datechoice>/')
+@APP.route('/class/<int:classchoice>/')
+@APP.route('/class/<int:classchoice>/<int:datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
-	datechoice = str(datechoice)
-	classList = sorted(data.classList().keys())
-	choice = scraper.getClassSchedule(classchoice, datechoice)
-	return render_template('scheduleViewer.html', choice=choice, \
-		datechoice=datechoice, classchoice=classchoice, classList=classList)
+    """
+    Input: classchoice (4[0-9]) and datechoice (6-8[0-9])
+    Output: HTML-formatted single day eventlist
+    """
+    datechoice = str(datechoice)
+    choice = scraper.getClassSchedule(classchoice, datechoice)
+    return render_template('scheduleViewer.html', choice=choice,
+                           datechoice=datechoice, classchoice=classchoice,
+                           classList=CLASSLIST)
 
 if __name__ == '__main__':
-	app.debug = True
-	if app.debug == False:
-		port = int(os.environ.get('PORT', 5000))
-		app.run(host='0.0.0.0', port=port)
-	else:
-		app.run()
+    APP.debug = True
+    if not APP.debug:
+        PORT = int(os.environ.get('PORT', 5000))
+        APP.run(host='0.0.0.0', port=PORT)
+    else:
+        APP.run()
