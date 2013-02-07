@@ -17,4 +17,4 @@ def classID(classchoice):
 	# classID(int) takes an integer as argument and finds the associated class in classList()
 	# Returns None if classchoice is not in the classList
 	# Value is used for TimeEdit-identifiers.
-	return classList().get(classchoice, None)
+	return str(classList().get(classchoice, None))

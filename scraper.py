@@ -5,8 +5,6 @@ from flask import abort, url_for
 from dateparser import teDate, parseDate
 
 def getClassSchedule(classchoice, rawdate):
-
-	# Find associated classIdentifier using the classchoice the function has been invoked with.
 	classIdentifier = classID(classchoice)
 
 	datechoice = parseDate(rawdate) 
@@ -14,14 +12,20 @@ def getClassSchedule(classchoice, rawdate):
 	if classIdentifier == None:
 		# Abort operation if no class with name classchoice can be found.
 		abort(404)
+
+	url = "http://schema.abbindustrigymnasium.se:8080/" +\
+		"4DACTION/iCal_downloadReservations/timeedit.vcs?"
+	url += "from=" + teDate(datechoice) + "&"
+	url += "to=" + teDate(datechoice) + "&"
+	url += "id1=" + classIdentifier
 	
+	fetchVcsUrl = urllib2.urlopen(url) # Fetch the VCS-file
+	urlData = fetchVcsUrl.read() # Get the raw-text VCS
+	schedule = cleanVcsFile(urlData)
 
+	return formatVcs(schedule, datechoice)
 
-	schedule = cleanVcsFile("http://schema.abbindustrigymnasium.se:8080/" +
-		"4DACTION/iCal_downloadReservations/timeedit.vcs" +
-		"?from=" + teDate(datechoice) + "&to=" + teDate(datechoice) + 
-		"&id1=" + str(classIdentifier))
-
+def formatVcs(schedule, datechoice):
 	scheduleFormatted = []
 	for each in schedule:
 		if re.match("^\n(?:DTSTART)", each): # Only include event-filled rows
@@ -32,23 +36,20 @@ def getClassSchedule(classchoice, rawdate):
 	return scheduleFormatted
 
 
-def cleanVcsFile(url):
-	fetchVcsUrl = urllib2.urlopen(url) # Fetch the VCS-file
-	urlRaw = fetchVcsUrl.read() # Get the raw-text VCS
-
+def cleanVcsFile(data):
 	# Regular expression that finds everything between "BEGIN:VEVENT" and
 	# the "END:VEVENT" keywords
 	regex = re.compile("(?:BEGIN\:VEVENT)(.*?)(?:END\:VEVENT)", re.DOTALL)
 
 	# Tidying up the VCS-file
-	urlRaw = urlRaw.replace("\r\n", "\n") # Fuck Windows
-	urlRaw = urlRaw.replace("=\n", "") # srsly Timeedit?
-	urlRaw = urlRaw.replace("=0D=0A", ":")
+	data = data.replace("\r\n", "\n") # Fuck Windows
+	data = data.replace("=\n", "") # srsly Timeedit?
+	data = data.replace("=0D=0A", ":")
 
 	# Following: Fixes for Swedish characters
-	urlRaw = urlRaw.replace("=D6", "&Ouml;")
-	urlRaw = urlRaw.replace("=F6", "&ouml;")
-	urlRaw = urlRaw.replace("=E4", "&auml;")
-	urlRaw = urlRaw.replace("=C5", "&Aring;")
-	urlRaw = urlRaw.replace("=E5", "&aring;")
-	return regex.split(urlRaw)
+	data = data.replace("=D6", "&Ouml;")
+	data = data.replace("=F6", "&ouml;")
+	data = data.replace("=E4", "&auml;")
+	data = data.replace("=C5", "&Aring;")
+	data = data.replace("=E5", "&aring;")
+	return regex.split(data)
