@@ -7,14 +7,11 @@ del path
 
 import dateparser
 
-class TestSequenceVCS2JSON(unittest.TestCase):
+class TestSequenceVcsParse(unittest.TestCase):
     """docstring for TestSequenceCSV2JSON"""
     
     def setUp(self):
         pass
-
-    def test_confirm_vcs(self):
-        self.assertTrue(True)
 
     def test_vcs_conversion(self):
         """
