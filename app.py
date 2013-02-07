@@ -17,14 +17,14 @@ def class_list():
 @app.route('/class/<int:classchoice>/')
 @app.route('/class/<int:classchoice>/<int:datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
-	datechoice = dateparser.parseDate(str(datechoice))
+	datechoice = str(datechoice)
 	classList = sorted(data.classList().keys())
 	choice = scraper.getClassSchedule(classchoice, datechoice)
-	return render_template('scheduleViewer.html', choice=choice, datechoice=datechoice, \
-		classchoice=classchoice, classList=classList)
+	return render_template('scheduleViewer.html', choice=choice, \
+		datechoice=datechoice, classchoice=classchoice, classList=classList)
 
 if __name__ == '__main__':
-	app.debug = False
+	app.debug = True
 	if app.debug == False:
 		port = int(os.environ.get('PORT', 5000))
 		app.run(host='0.0.0.0', port=port)

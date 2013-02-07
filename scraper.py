@@ -2,29 +2,25 @@ import urllib2, re, math, datetime
 from event import eventMakeObject
 from data import classList, classID
 from flask import abort, url_for
+from dateparser import teDate, parseDate
 
-def getClassSchedule(classchoice, parsedDate):
+def getClassSchedule(classchoice, rawdate):
 
 	# Find associated classIdentifier using the classchoice the function has been invoked with.
 	classIdentifier = classID(classchoice)
 
-	if type(parsedDate) == list:
-		datechoice = parsedDate[0]
-	else:
-		datechoice = parsedDate 
+	datechoice = parseDate(rawdate) 
 
 	if classIdentifier == None:
 		# Abort operation if no class with name classchoice can be found.
 		abort(404)
 	
-	# Parsing dates in the TimeEdit-request form (ie the last two digits of year + the weeknumber)
-	# Range: "0001" - "9953"
-	fromDate = str(datechoice.year)[2:].zfill(2) + str(datechoice.isocalendar()[1]).zfill(2)
-	toDate = str(datechoice.year)[2:].zfill(2) + str(datechoice.isocalendar()[1]).zfill(2)
+
 
 	schedule = cleanVcsFile("http://schema.abbindustrigymnasium.se:8080/" +
 		"4DACTION/iCal_downloadReservations/timeedit.vcs" +
-		"?from=" + fromDate + "&to=" + toDate + "&id1=" + str(classIdentifier))
+		"?from=" + teDate(datechoice) + "&to=" + teDate(datechoice) + 
+		"&id1=" + str(classIdentifier))
 
 	scheduleFormatted = []
 	for each in schedule:
