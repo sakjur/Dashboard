@@ -3,20 +3,28 @@ import datetime, re
 now = datetime.datetime.now()
 
 def parseDate(datechoice):
-	if datechoice == None:
+	if datechoice == None or datechoice == "today":
 		return now.date()
-	elif len(datechoice) == 6:
+	elif datechoice == "tomorrow":
+		return now.date() + datetime.timedelta(days=1)
+	elif len(datechoice) == 6 and type(datechoice) == int:
 		year = int("20" + datechoice[:2])
 		month = int(datechoice[2:4])
 		day = int(datechoice[4:6])
 		return datetime.date(year, month, day)
-	elif len(datechoice) == 8:
+	elif len(datechoice) == 8 and type(datechoice) == int:
 		year = int(datechoice[:4])
 		month = int(datechoice[4:6])
 		day = int(datechoice[6:8])
 		return datetime.date(year, month, day)
 	else:
 		return now.date()
+
+def isToday(datechoice):
+	if parseDate(datechoice) == now.date():
+		return True
+	else:
+		return False
 
 def parseVcsTimeFormat(timestring):
 	"""

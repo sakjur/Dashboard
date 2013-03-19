@@ -25,10 +25,10 @@ def class_list():
     return render_template('classList.html', classList=CLASSLIST)
 
 
-@APP.route('/<int:classchoice>/')
-@APP.route('/<int:classchoice>/<int:datechoice>/')
 @APP.route('/class/<int:classchoice>/')
-@APP.route('/class/<int:classchoice>/<int:datechoice>/')
+@APP.route('/class/<int:classchoice>/<datechoice>/')
+@APP.route('/<int:classchoice>/')
+@APP.route('/<int:classchoice>/<datechoice>/')
 def class_choice(classchoice=None, datechoice=None):
     """
     Input: classchoice (4[0-9]) and datechoice (6-8[0-9])
@@ -41,7 +41,7 @@ def class_choice(classchoice=None, datechoice=None):
                            classList=CLASSLIST)
 
 if __name__ == '__main__':
-    APP.debug = True
+    APP.debug = False
     if not APP.debug:
         PORT = int(os.environ.get('PORT', 5000))
         APP.run(host='0.0.0.0', port=PORT)
