@@ -41,9 +41,18 @@ def class_choice(classchoice=None, datechoice=None):
                            classList=CLASSLIST)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     APP.debug = False
     if not APP.debug:
         PORT = int(os.environ.get('PORT', 5000))
         APP.run(host='0.0.0.0', port=PORT)
     else:
         APP.run()
+=======
+	app.debug = False
+	if app.debug == False:
+		port = int(os.environ.get('PORT', 5000))
+		app.run(host='0.0.0.0', port=port)
+	else:
+		app.run()
+>>>>>>> 8403b3fbd33062b853cf5abb5b839e3c4ab0ff3d
