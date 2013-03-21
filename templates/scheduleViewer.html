@@ -5,7 +5,14 @@
 
 {% block body %}
 	<h1 id="classname">{{ classchoice }}</h1><br />
+	<div class="row" style="margin-bottom: 20px;">
+		<a href="{{ url_for("class_choice", classchoice=classchoice, datechoice="today") }}" 
+		class="span4 btn" style="text-align:center;">Idag</a>
+		<a href="{{ url_for("class_choice", classchoice=classchoice, datechoice="tomorrow") }}"
+		class="span4 btn" style="text-align:center;">Imorgon</a>
+	</div>
 	<div class="row">
+		{% if choice %}
 		{% for each in choice %}
 			<div class="eventtitle span4">
 				<h3>{{ each.subject|safe }}</h3>
@@ -16,11 +23,13 @@
 			<div class="detailedinfo span8">
 				{{ each.startTime.date() }} <br />
 				{{ each.class|safe }} <br />
-				{{ each.teacher|safe }}	<br />
-				{{ each.location|safe }} <br />
+				{{ each.teacher|safe }}
 			</div>
 			<div class="span12" style="height:20px;">
 			</div>
 		{% endfor %}
+		{% else %}
+			Det saknas lektioner för den här dagen.
+		{% endif %}
 	</div>
 {% endblock %}
