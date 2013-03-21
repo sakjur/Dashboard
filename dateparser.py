@@ -7,12 +7,12 @@ def parseDate(datechoice):
 		return now.date()
 	elif datechoice == "tomorrow":
 		return now.date() + datetime.timedelta(days=1)
-	elif len(datechoice) == 6 and type(datechoice) == int:
+	elif len(datechoice) == 6 and re.match('[0-9]{6}', datechoice):
 		year = int("20" + datechoice[:2])
 		month = int(datechoice[2:4])
 		day = int(datechoice[4:6])
 		return datetime.date(year, month, day)
-	elif len(datechoice) == 8 and type(datechoice) == int:
+	elif len(datechoice) == 8 and re.match('[0-9]{8}', datechoice):
 		year = int(datechoice[:4])
 		month = int(datechoice[4:6])
 		day = int(datechoice[6:8])
