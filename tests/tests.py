@@ -17,14 +17,24 @@ class TestSequenceVcsParse(unittest.TestCase):
         """
         Test for testing the VCS timeformat conversion.
 
-        This tests passes if the valid string 20121213T071000Z is equal to the expected
-        datetime format when parsed through the parseVcsTimeFormat-function.
+        This tests passes if the valid string 20121213T071000Z is equal to the 
+        expected datetime format when parsed through the 
+        parseVcsTimeFormat-function.
+        
+        Observer - the parse Vcs TimeFormat changes the hour from UTC -> CET
         """
         testDataVcs = "20121213T071000Z"
-        testDataTime = datetime.datetime(2012, 12, 13, 7, 10, 0, 0)
+        testDataTime = datetime.datetime(2012, 12, 13, 8, 10, 0, 0)
 
         test = dateparser.parseVcsTimeFormat(testDataVcs)    
+
+        testDataVcs2 = "20120913T061000Z"
+        testDataTime2 = datetime.datetime(2012, 9, 13, 8, 10, 0, 0)
+
+        test2 = dateparser.parseVcsTimeFormat(testDataVcs2)    
+
         self.assertEqual(test, testDataTime)
+        self.assertEqual(test2, testDataTime2)
 
     def test_vcs_wrong_format(self):
         """
@@ -74,6 +84,36 @@ class TestSequenceVcsParse(unittest.TestCase):
         test = dateparser.teDate(testDataTime)    
         self.assertEqual(test, "1250")
 
+
+    def tearDown(self):
+        pass
+
+class TestSequenceUtcConversion(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def is_dst(self, year, month, date):
+        testDataTime = datetime.date(year, month, date)
+
+        return dateparser.is_dst(testDataTime)
+
+    def test_no_dst(self):
+        self.assertFalse(self.is_dst(2012, 12, 13))
+
+    def test_no_dst2(self):
+        self.assertFalse(self.is_dst(2013, 11, 13))
+
+    def test_no_dst3(self):
+        self.assertFalse(self.is_dst(2013, 10, 28))
+
+    def test_dst(self):
+        self.assertTrue(self.is_dst(2013, 04, 13))
+
+    def test_dst2(self):
+        self.assertTrue(self.is_dst(2013, 10, 26))
+
+    def test_dst3(self):
+        self.assertTrue(self.is_dst(2014, 03, 31))
 
     def tearDown(self):
         pass
