@@ -7,6 +7,8 @@ def parseDate(datechoice):
         return now.date()
     elif datechoice == "tomorrow":
         return now.date() + datetime.timedelta(days=1)
+    elif datechoice[0] == "+" or datechoice[0] == "-":
+        return now.date() + datetime.timedelta(days=int(datechoice))
     elif len(datechoice) == 6 and re.match('[0-9]{6}', datechoice):
         year = int("20" + datechoice[:2])
         month = int(datechoice[2:4])
